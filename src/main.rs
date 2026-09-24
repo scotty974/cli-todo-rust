@@ -13,7 +13,10 @@ struct Args {
     add:Option<String>,
 
     #[arg(short, long)]
-    show:bool
+    show:bool,
+
+    #[arg(short, long, value_name="TASK_ID")]
+    del:Option<String>
 }
 
 fn main(){
@@ -25,6 +28,10 @@ fn main(){
 
     if args.show {
         let _ = models::read_tasks();
+    }
+
+    if let Some(del) = args.del {
+        let _ = models::delete_task(del);
     }
     
 }
