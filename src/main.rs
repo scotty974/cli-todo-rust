@@ -1,8 +1,7 @@
-use std::fs::{File, OpenOptions};
-use std::io::{self, Read, Write};
-use std::io::prelude::*;
-use clap::Parser;
+use std::println;
 
+use clap::Parser;
+mod models;
 
 
 #[derive(Parser, Debug)]
@@ -16,28 +15,16 @@ struct Args {
     #[arg(short, long)]
     show:bool
 }
-fn main()-> io::Result<()>{
+
+fn main(){
     let args = Args::parse();
     
     if let Some(task) = args.add {
-        let mut file = OpenOptions::new().create(true).append(true).open("todo.txt")?;
-        writeln!(file, "{}", task)?;
+        let _ = models::build_task(task);
     }
 
-     if args.show {
-        let mut file = File::open("todo.txt")?;
-        let mut contents = String::new();
-
-        file.read_to_string(&mut contents)?;
-
-        if contents.is_empty() {
-            println!("Aucune tâche.");
-        } else {
-            println!("Tâches :");
-            print!("{}", contents);
-        }
+    if args.show {
+        let _ = models::read_tasks();
     }
-
-    Ok(())
     
 }
