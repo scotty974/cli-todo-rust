@@ -5,6 +5,8 @@ use uuid::Uuid;
 use std::io;
 use std::fs;
 use std::println;
+use colored::Colorize;
+use colored_json::ToColoredJson;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Task {
@@ -43,9 +45,13 @@ pub fn read_tasks()->std::io::Result<()>{
 
     let file = fs::read_to_string("task.json").expect("Impossible de lire le fichier des taches");
 
-    let json = serde_json::to_string_pretty(&file).expect("Pas de taches");
+    let colored_json = file.to_colored_json_auto()?;
 
-    println!("Vos taches : {}", json);
+    // let json : serde_json::Value = serde_json::from_str(&file).expect("Pas de taches");
+
+    // let formatted_json = serde_json::to_string_pretty(&json)?;
+
+    println!("{}", colored_json);
 
     Ok(())
 
